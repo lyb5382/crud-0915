@@ -1,0 +1,52 @@
+:root {
+    --upload: #e7e7e7;
+    --delete: #ef4444;
+    --open: #1daa3c;
+    --link: #3b82f6;
+    --link-hover: #2563eb;
+    --text: #1f2937;
+    --bg: #ffffff;
+    --btn-dark: #1f2937;
+    --btn-light: #f3f4f6;
+    --border: #e5e7eb;
+    --ring: 0 0 0 3px rgba(59, 130, 246, 0.4);
+}
+
+html {
+    font-size: 62.5%;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+ul {
+    list-style: none;
+}
+
+a {
+    font-weight: 500;
+    color: var(--link);
+    text-decoration: none;
+
+    &:hover {
+        color: var(--link-hover);
+    }
+}
+
+h1 {
+    font-size: 3.2rem;
+    line-height: 1.1;
+}
+
+.container {
+    max-width: 80rem;
+    margin: auto;
+
+    @media screen and (max-width:799px) {
+        padding: 0 2rem;
+
+    }
+}
