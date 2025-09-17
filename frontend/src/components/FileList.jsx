@@ -1,45 +1,46 @@
-import React from 'react'
+import React, { forwardRef, useEffect, useImperativeHandle, useState } from 'react'
 import api from '../api'
 import './FileList.scss'
 
-const FileList = () => {
+const FileList = forwardRef((props, ref) => {
+    const [item, setItem] = useState([])
+    const load = async () => {
+        const { data } = await api.get('files/', { params: { t: Date.now() } })
+        setItem(data.out)
+    }
+    useEffect(() => {
+        load()
+    }, [])
+    useImperativeHandle(ref, () => ({ load }))
+    const del = async (id) => {
+        if (!window.confirm('삭제?')) return
+        try {
+            await api.delete(`/files/${id}`)
+            await load()
+            console.log('삭제 완료', id)
+        } catch (error) {
+            console.error('실패', error)
+        }
+    }
     return (
         <ul className='file-list'>
-            <li>
-                <h3>sample img</h3>
-                <div className="img-wrap">
-                    <img src="https://crud-0915.s3.ap-northeast-2.amazonaws.com/uploads/1757937238492-sRtlcM-test.png" alt="" />
-                </div>
-                <p>설명</p>
-                <div className="btn-wrap">
-                    <a href="https://crud-0915.s3.ap-northeast-2.amazonaws.com/uploads/1757937238492-sRtlcM-test.png" className='open-btn'>open</a>
-                    <button className='delete-btn'>delete</button>
-                </div>
-            </li>
-            <li>
-                <h3>sample img</h3>
-                <div className="img-wrap">
-                    <img src="https://crud-0915.s3.ap-northeast-2.amazonaws.com/uploads/1757937238492-sRtlcM-test.png" alt="" />
-                </div>
-                <p>설명</p>
-                <div className="btn-wrap">
-                    <a href="https://crud-0915.s3.ap-northeast-2.amazonaws.com/uploads/1757937238492-sRtlcM-test.png" className='open-btn'>open</a>
-                    <button className='delete-btn'>delete</button>
-                </div>
-            </li>
-            <li>
-                <h3>sample img</h3>
-                <div className="img-wrap">
-                    <img src="https://crud-0915.s3.ap-northeast-2.amazonaws.com/uploads/1757937238492-sRtlcM-test.png" alt="" />
-                </div>
-                <p>설명</p>
-                <div className="btn-wrap">
-                    <a href="https://crud-0915.s3.ap-northeast-2.amazonaws.com/uploads/1757937238492-sRtlcM-test.png" className='open-btn'>open</a>
-                    <button className='delete-btn'>delete</button>
-                </div>
-            </li>
+            {item.map((it) => (
+                <li key={it._id}>
+                    <h3>{it.title || it.originalName}</h3>
+                    <div className="img-wrap">
+                        {it.contentType?.startsWith('image/') && (
+                            <img src={it.url} alt="" style={{ maxWidth: 200, display: "block" }} />
+                        )}
+                    </div>
+                    <p>{it.description}</p>
+                    <div className="btn-wrap">
+                        <a href={it.url} target="_blank" rel="noreferrer" className='open-btn'>open</a>
+                        <button onClick={del(it._id)} className='delete-btn'>delete</button>
+                    </div>
+                </li>
+            ))}
         </ul>
     )
-}
+})
 
 export default FileList

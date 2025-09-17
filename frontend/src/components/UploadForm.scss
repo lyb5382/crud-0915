@@ -1,5 +1,6 @@
 .form-list {
     display: flex;
+    flex-wrap: wrap;
     gap: 1.2rem;
     align-items: center;
     justify-content: center;
@@ -8,7 +9,13 @@
     margin: 2rem;
     border-radius: 1.2rem;
 
-    >* {
+    .left {
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+    }
+
+    .left>* {
         border-radius: .5rem;
         padding: 1rem;
     }
@@ -16,7 +23,7 @@
     input[types='text'] {
         // flex: 1;
         border: .1rem solid var(--border);
-        font-size: 1.6rem;
+        outline: none;
     }
 
     .upload-btn {
