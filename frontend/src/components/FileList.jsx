@@ -5,7 +5,8 @@ import './FileList.scss'
 const FileList = forwardRef((props, ref) => {
     const [item, setItem] = useState([])
     const load = async () => {
-        const { data } = await api.get('files/', { params: { t: Date.now() } })
+        const { data } = await api.get('/files', { params: { t: Date.now() } })
+        console.log("GET /files 응답:", data.out)
         setItem(data.out)
     }
     useEffect(() => {
@@ -35,7 +36,7 @@ const FileList = forwardRef((props, ref) => {
                     <p>{it.description}</p>
                     <div className="btn-wrap">
                         <a href={it.url} target="_blank" rel="noreferrer" className='open-btn'>open</a>
-                        <button onClick={del(it._id)} className='delete-btn'>delete</button>
+                        <button onClick={() => del(it._id)} className='delete-btn'>delete</button>
                     </div>
                 </li>
             ))}
